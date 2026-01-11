@@ -29,7 +29,7 @@ services:
     volumes:
       - ./config/livekit.prod.yaml:/etc/livekit.yaml:ro
     environment:
-      - LIVEKIT_KEYS=${LIVEKIT_API_KEY}:${LIVEKIT_API_SECRET}
+      - LIVEKIT_KEYS=${LIVEKIT_API_KEY}: ${LIVEKIT_API_SECRET}
     networks:
       - app_network
     healthcheck:
