@@ -1,0 +1,21 @@
+# Docker ignore file for debug service
+
+# Build artifacts
+_build/
+deps/
+*.ez
+
+# IDE
+.elixir_ls/
+.idea/
+.vscode/
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+
+# Test files
+test/

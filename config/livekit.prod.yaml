@@ -1,0 +1,121 @@
+# =============================================================================
+# LiveKit Production Configuration
+# =============================================================================
+#
+# CRITICAL: Set these environment variables before deploying:
+#   - EXTERNAL_IP: Your server's public IP address
+#   - LIVEKIT_API_KEY: Your API key
+#   - LIVEKIT_API_SECRET: Your API secret (min 32 characters)
+#
+# This config enables:
+#   - Detailed packet-level logging for debugging
+#   - TURN server integration for NAT traversal
+#   - Optimized settings for production use
+#
+# =============================================================================
+
+port: 7880
+
+# =============================================================================
+# RTC Configuration - CRITICAL for WebRTC to work on server
+# =============================================================================
+rtc:
+  # UDP port range for media
+  port_range_start: 50000
+  port_range_end: 50100
+  
+  # TCP fallback port
+  tcp_port: 7881
+  
+  # STUN/TURN UDP port
+  stun_port: 7882
+  
+  # CRITICAL: Set to false for server deployment
+  # LiveKit will use node_ip instead of trying to detect external IP
+  use_external_ip: false
+  
+  # CRITICAL: Your server's public IP address
+  # This MUST be set correctly or WebRTC will fail!
+  # Replace with actual IP or use environment variable substitution
+  node_ip: ${EXTERNAL_IP:-0.0.0.0}
+  
+  # Enable ICE lite for better server performance
+  # Reduces ICE negotiation time
+  ice_lite: true
+
+# =============================================================================
+# TURN Server Configuration - CRITICAL for NAT traversal
+# =============================================================================
+turn:
+  enabled: true
+  # External TURN server (coturn running on same host)
+  domain: ${EXTERNAL_IP:-localhost}
+  tls_port: 5349
+  udp_port: 3478
+  external_tls: false
+
+# =============================================================================
+# API Keys
+# =============================================================================
+# In production, use LIVEKIT_KEYS environment variable instead:
+# LIVEKIT_KEYS=api_key:api_secret
+keys:
+  devkey: secret_that_is_at_least_32_characters_long
+
+# =============================================================================
+# Logging - DETAILED for debugging
+# =============================================================================
+logging:
+  # Main log level: debug, info, warn, error
+  level: debug
+  
+  # Pion (WebRTC) log level - set to debug to see packet flow
+  pion_level: info
+  
+  # JSON format for easier parsing
+  json: false
+  
+  # Log sampling (1 = log everything)
+  sample: 1
+
+# =============================================================================
+# Room Settings
+# =============================================================================
+room:
+  # Auto-create rooms when participants join
+  auto_create: true
+  
+  # Room timeout when empty (seconds)
+  empty_timeout: 300
+  
+  # Maximum participants per room
+  max_participants: 50
+  
+  # Enable detailed room events in logs
+  enable_detailed_logging: true
+
+# =============================================================================
+# Limits & Performance
+# =============================================================================
+limit:
+  # Maximum incoming bitrate per participant (10 Mbps)
+  max_incoming_bitrate: 10000000
+  
+  # Maximum outgoing bitrate per participant (10 Mbps)  
+  max_outgoing_bitrate: 10000000
+  
+  # Subscription limit
+  max_subscriptions_per_participant: 100
+
+# =============================================================================
+# Webhook Configuration (optional)
+# =============================================================================
+# webhook:
+#   urls:
+#     - http://backend:4000/api/webhooks/livekit
+#   api_key: webhook_key
+
+# =============================================================================
+# Region Configuration
+# =============================================================================
+region: default
